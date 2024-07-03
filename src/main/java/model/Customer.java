@@ -3,12 +3,12 @@ package model; /**
  * @author  hbo-ict@hva.nl
  */
 
-
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-public class Customer {
+public class Customer implements Comparable<Customer> {
     private LocalTime queuedAt;      // time of arrival at cashier
     private String zipCode;          // zip-code of the customer
     private Map<Product, Integer> itemsCart = new HashMap<>();;     // items purchased by customer
@@ -50,6 +50,7 @@ public class Customer {
         return totalBill;
     }
 
+    @Override
     public String toString() {
         StringBuilder result = new StringBuilder("queuedAt: " + queuedAt);
         result.append("\nzipCode: " + zipCode);
@@ -59,6 +60,29 @@ public class Customer {
         }
         result.append("\n");
         return result.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(queuedAt);
+    }
+
+    @Override
+    public boolean equals (Object customer) {
+        if (this == customer) {
+            return true;
+        } if (customer == null) {
+            return false;
+        } if (getClass() != customer.getClass()) {
+            return false;
+        }
+        Customer otherCustomer = (Customer) customer;
+        return Objects.equals(queuedAt, otherCustomer.queuedAt);
+    }
+
+    @Override
+    public int compareTo(Customer other) {
+        return queuedAt.compareTo(other.queuedAt); // Assignment says queuedAt is unique, so using it to compare.
     }
 
 
