@@ -35,6 +35,10 @@ public class Customer implements Comparable<Customer> {
     public int getNumberOfItems() {
         int numItems = 0;
         // TODO stap 2: Calculate the total number of items
+        for (Integer amount : itemsCart.values()) {
+            // Loop counts the total amount of each product to the sum
+            numItems += amount;
+        }
         return numItems;
     }
 
@@ -42,6 +46,13 @@ public class Customer implements Comparable<Customer> {
     public void addToCart(Product product, int number) {
         // TODO stap 2: When adding a number of products to the cart,
         //  the number should be adjusted when product already exists in cart
+
+        if (itemsCart.containsKey(product)) {
+            int currentAmount = itemsCart.get(product);
+            itemsCart.put(product, currentAmount + number); // If the product already exists in the cart then adds the new amoun with currentAmount.
+        } else {
+            itemsCart.put(product, number); // If product doesn't exist in cart yet adds product + amount only. (no currentAmount here)
+        }
     }
 
     public double calculateTotalBill() {
