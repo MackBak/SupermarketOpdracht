@@ -28,14 +28,15 @@ public class Supermarket {
     }
 
     public void initializeCollections() {
-        // TODO stap 3: create empty data structures for products and customers
-
+        products = new HashSet<>();
+        customers = new TreeSet<>();
     }
 
     public int getTotalNumberOfItems() {
         int totalItems = 0;
-        // TODO stap 3: calculate the total number of shopped items of all customers
-
+        for (Customer customer : customers) {
+            totalItems += customer.getNumberOfItems();
+        }
         return totalItems;
     }
 
