@@ -80,12 +80,27 @@ public class Supermarket {
         System.out.println();
         System.out.println(">>> Products and total number bought:");
         System.out.println();
+
         // TODO stap 3: display the description of the products and total number bought per product.
+        Map <Product, Integer> productCounts = findNumberOfProductsBought();
+        for (Map.Entry<Product, Integer> entry : productCounts.entrySet()) {
+            System.out.println(entry.getKey().getDescription() + " " + entry.getValue());
+        }
 
         System.out.println();
         System.out.println(">>> Products and zipcodes");
         System.out.println();
+
         // TODO stap 3: display the description of the products and per product all zipcodes where the product is bought.
+        Map<Product, Set<String>> zipCodesPerProduct = findZipcodesPerProduct();
+        for (Map.Entry<Product, Set<String>> entry : zipCodesPerProduct.entrySet()) {
+            System.out.println(entry.getKey().getDescription() + ":");
+            for (String zipCode : entry.getValue()) {
+                System.out.println(" " + zipCode + ", ");
+            }
+            System.out.println(); // Empty println to move to next ln after printing the zip codes for the product.
+        }
+
 
         System.out.println();
         System.out.println(">>> Most popular products");
@@ -125,10 +140,19 @@ public class Supermarket {
      * @return Map with total number of purchases per product
      */
     public Map<Product, Integer> findNumberOfProductsBought() {
+
         // TODO stap 3: create an appropriate data structure for the products and their numbers bought
         //  and calculate the contents
 
-        return null;
+        Map<Product, Integer> productCounter = new HashMap<>();
+        for (Customer customer : customers) {
+            for (Map.Entry<Product, Integer> entry : customer.getItemsCart().entrySet()) {
+                Product product = entry.getKey();
+                int quantity = entry.getValue();
+                productCounter.put(product, productCounter.getOrDefault(product, 0) + quantity);
+            }
+        }
+        return productCounter;
     }
 
     /**
@@ -138,8 +162,16 @@ public class Supermarket {
     public Map<Product, Set<String>> findZipcodesPerProduct() {
         // TODO stap 3: create an appropriate data structure for the products and their zipcodes
         //  and find all the zipcodes per product
+        Map<Product, Set<String>> zipCodesPerProduct = new HashMap<>();
+        for (Customer customer : customers) {
+            String zipCode = customer.getZipCode();
+            for (Product product : customer.getItemsCart().keySet()) {
 
-        return null;
+                // Original code: zipCodesPerProduct.put(product, zipCodesPerProduct.getOrDefault(product, new HashSet<>()));
+                zipCodesPerProduct.computeIfAbsent(product, k -> new HashSet<>()).add(zipCode);
+            }
+        }
+        return zipCodesPerProduct;
     }
 
     /**

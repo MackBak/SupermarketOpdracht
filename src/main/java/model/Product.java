@@ -21,9 +21,6 @@ public class Product implements Comparable<Product> {
         this.price = price;
     }
 
-    // TODO Stap 1: implement relevant overrides of equals(), hashcode(), compareTo for
-    //  model classes to be able to use them in sets, maps
-
     @Override
     public int hashCode() {
         return Objects.hash(code);
