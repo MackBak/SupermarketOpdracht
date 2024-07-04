@@ -23,20 +23,14 @@ public class Customer implements Comparable<Customer> {
         this.zipCode = zipCode;
     }
 
-    // TODO stap 1: implement relevant overrides of equals(), hashcode(), compareTo for
-    //  model classes to be able to use them in sets, maps
-
-
-
     /**
      * calculate the total number of items purchased by this customer
      * @return
      */
     public int getNumberOfItems() {
         int numItems = 0;
-        // TODO stap 2: Calculate the total number of items
         for (Integer amount : itemsCart.values()) {
-            // Loop counts the total amount of each product to the sum
+            // The loop counts the total amount of each product and adds this to the sum.
             numItems += amount;
         }
         return numItems;
@@ -51,7 +45,7 @@ public class Customer implements Comparable<Customer> {
             int currentAmount = itemsCart.get(product);
             itemsCart.put(product, currentAmount + number); // If the product already exists in the cart then adds the new amoun with currentAmount.
         } else {
-            itemsCart.put(product, number); // If product doesn't exist in cart yet adds product + amount only. (no currentAmount here)
+            itemsCart.put(product, number); // If product doesn't exist in cart yet adds product + amount of it.
         }
     }
 
@@ -75,19 +69,19 @@ public class Customer implements Comparable<Customer> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(queuedAt);
+        return Objects.hash(queuedAt); // Calculates a hash code for a a customer based on the queued time.
     }
 
     @Override
     public boolean equals (Object customer) {
         if (this == customer) {
             return true;
-        } if (customer == null) {
+        } if (customer == null) { // If customer is null then can't be equal to current object anyways.
             return false;
-        } if (getClass() != customer.getClass()) {
+        } if (getClass() != customer.getClass()) { // Used to verify comparison object is of the same class.
             return false;
         }
-        Customer otherCustomer = (Customer) customer;
+        Customer otherCustomer = (Customer) customer; // Object is the input, so I need to cast the customer to Customer type so queuedAt can be used.
         return Objects.equals(queuedAt, otherCustomer.queuedAt);
     }
 

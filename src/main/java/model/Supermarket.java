@@ -28,14 +28,14 @@ public class Supermarket {
     }
 
     public void initializeCollections() {
-        products = new HashSet<>();
-        customers = new TreeSet<>();
+        products = new HashSet<>(); // Initializing products as HashShet for products because products are unique.
+        customers = new TreeSet<>(); // Iniializing customers as TreeSet because I need to sort them by order (queuedAt).
     }
 
     public int getTotalNumberOfItems() {
         int totalItems = 0;
         for (Customer customer : customers) {
-            totalItems += customer.getNumberOfItems();
+            totalItems += customer.getNumberOfItems(); // Loops over all customers and then per customer calls the getNumberOfItems method and adds this to the sum.
         }
         return totalItems;
     }
@@ -179,10 +179,23 @@ public class Supermarket {
      * @return Map with map of product and number per zipcode
      */
     public Map<String, Map<Product, Integer>> findNumberOfProductsByZipcode() {
-        // TODO stap 3: create an appropriate data structure for zipcodes
-        //  and the collection of products with numbers bought
-        //  find all the product per zipcode and the number bought by a customer with the zipcode
-        return null;
+        Map<String, Map<Product, Integer>> productsByZipCode = new HashMap<>();
+        for (Customer customer : customers) {
+            String zipCode = customer.getZipCode();
+
+            // Retrieving or creating new map for the postal code:
+            Map<Product, Integer> productCounter = productsByZipCode.computeIfAbsent(zipCode, k -> new HashMap<>());
+
+            // Iterates through the items in the shopping cart:
+            for (Map.Entry<Product, Integer> entry : customer.getItemsCart().entrySet()) {
+                Product product = entry.getKey();
+                int quantity = entry.getValue();
+
+                // Putting new products in map or updating existing count.
+                productCounter.put(product, productCounter.getOrDefault(product, 0) + quantity);
+            }
+        }
+        return productsByZipCode;
     }
 
     /**

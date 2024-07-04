@@ -23,20 +23,20 @@ public class Product implements Comparable<Product> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(code);
+        return Objects.hash(code); // Calculates a hash code for a product based on its unique code.
     }
 
     @Override
     public boolean equals (Object product) {
         if (this == product) return true;
-        if (product == null || getClass() != product.getClass()) return false;
+        if (product == null || getClass() != product.getClass()) return false; // If product is null then can't be equal to current object. If not the same class it can also not be the same object.
         Product product2 = (Product) product;
         return Objects.equals(code, product2.code);
     }
 
     @Override
     public int compareTo(Product otherProduct) {
-        return code.compareTo(otherProduct.code); // Assignment says descirption of product is unique so I'm using it to compare.
+        return code.compareTo(otherProduct.code); // Using code to compare products as code is unique.
     }
 
     @Override
