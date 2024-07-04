@@ -60,8 +60,16 @@ public class Supermarket {
         System.out.printf("\n>>>>> Customer Statistics of '%s' between %s and %s <<<<<\n",
                 this.name, this.openTime, this.closingTime);
         System.out.println();
+        
         // TODO stap 4: calculate and show the customer(s) with the highest bill and most paying customer
+        double biggestBill = findHighestBill(); // Using findHighestBill method to
+        List<Customer> customerWithHighestBill = customers.stream()
+                        .filter(customer -> customer.calculateTotalBill() == biggestBill)
+                        .toList();
+        
         System.out.printf("Customer that has the highest bill of %.2f euro: \n", findHighestBill());
+        customerWithHighestBill.forEach(System.out::println); // Prints each customer with the highest bill
+
         System.out.println(findMostPayingCustomer());
         System.out.println();
     }
@@ -203,18 +211,26 @@ public class Supermarket {
      * @return value of the highest bill
      */
     public double findHighestBill() {
-        // TODO stap 4: use a stream to find the highest bill
-        return 0.0;
+        return customers.stream() // Creating a stream of Customers
+                .mapToDouble(Customer::calculateTotalBill) // Applying calculateTotalBill method to all the customers in the stream and converting this to a double.
+                .max() // Finding this max value in the stream.
+                .orElse(0.0); // If empty provided value of 0.0 so no crashes happen.
     }
 
     /**
      *
      * @return customer with highest bill
      */
+
+    // TODO: Check with Gerke if this needs to become a list. 2 users with the same highest bill could become an issue I think.
+
     public Customer findMostPayingCustomer() {
-        // TODO stap 4: use a stream and the highest bill to find the most paying customer
-        return null;
-    }
+        double biggestBill = findHighestBill(); // Using method findHighestBill to get the biggest bill.
+        return customers.stream() // Creating a stream of customers.
+                .filter (customer -> customer.calculateTotalBill() == biggestBill) // With this filter I only keep the customer that matches the biggestBill double.
+                .findFirst() // Finds the first customer that matches the filter.
+                .orElse(null); // Returns null if there's no customer.
+         }
 
     /**
      * calculates the total revenue of all customers purchases

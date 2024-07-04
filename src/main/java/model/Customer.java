@@ -50,9 +50,9 @@ public class Customer implements Comparable<Customer> {
     }
 
     public double calculateTotalBill() {
-        double totalBill = 0.0;
-        // TODO stap 4: Calculate the total cost of all items, use a stream
-        return totalBill;
+        return itemsCart.entrySet().stream() // With entrySet I get the Set that holds all key value pirs of itemsCart (HashMap)
+                .mapToDouble(entry -> entry.getKey().getPrice() * entry.getValue()) // mapToDouble makes all elemnts in the stream a double. With the lambda expression I retrieve the product & price and is multiplied by amount of products.
+                .sum(); // The result of the lambda expression above is the sum, this is returned.
     }
 
     @Override

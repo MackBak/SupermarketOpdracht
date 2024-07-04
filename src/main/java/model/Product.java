@@ -44,8 +44,6 @@ public class Product implements Comparable<Product> {
         return "ToString in product: " + description + " " + price + " " + code;
     }
 
-
-
     public String getCode() {
         return code;
     }
