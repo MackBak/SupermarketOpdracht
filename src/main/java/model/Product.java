@@ -26,32 +26,26 @@ public class Product implements Comparable<Product> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(description);
+        return Objects.hash(code);
     }
 
     @Override
     public boolean equals (Object product) {
-        if (this == product) {
-            return true;
-        } if (product == null) {
-            return false;
-        } if (getClass() != product.getClass()) {
-            return false;
-        }
-        Product otherProduct = (Product) product;
-        return Objects.equals(description, otherProduct.description);
+        if (this == product) return true;
+        if (product == null || getClass() != product.getClass()) return false;
+        Product product2 = (Product) product;
+        return Objects.equals(code, product2.code);
     }
 
     @Override
     public int compareTo(Product otherProduct) {
-        return description.compareTo(otherProduct.description); // Assignment says descirption of product is unique so I'm using it to compare.
+        return code.compareTo(otherProduct.code); // Assignment says descirption of product is unique so I'm using it to compare.
     }
 
     @Override
     public String toString() {
         return "ToString in product: " + description + " " + price + " " + code;
     }
-
 
 
 

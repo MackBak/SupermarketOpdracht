@@ -44,7 +44,7 @@ class ProductTest {
     }
 
     @Test
-    void t013_prductsCanBeLoadedIntoASet() {
+    void t013_prductsCanBeLoadedIntoASet() { // Test fails until step 3 is completed. This test requires initializeCollections from SuperMarketbuilder which is in step 3.
         Supermarket supermarket = new SupermarketBuilder("src/main/resources/jambi1Json.txt").initializeSupermarket().addProducts().addCustomers().create();
         assertEquals(5, supermarket.getProducts().size(),
                 "A duplicate product code should not have been added to the set");
