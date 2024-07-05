@@ -60,17 +60,17 @@ public class Supermarket {
         System.out.printf("\n>>>>> Customer Statistics of '%s' between %s and %s <<<<<\n",
                 this.name, this.openTime, this.closingTime);
         System.out.println();
-        
-        // TODO stap 4: calculate and show the customer(s) with the highest bill and most paying customer
-        double biggestBill = findHighestBill(); // Using findHighestBill method to
-        List<Customer> customerWithHighestBill = customers.stream()
-                        .filter(customer -> customer.calculateTotalBill() == biggestBill)
-                        .toList();
+
+        Customer customerWithHighestBill = customers.stream() // Creating stream of customers
+                        .filter(customer -> customer.calculateTotalBill() == findHighestBill())
+                        .findFirst() // Finding first customer that matches the filter. Originally wanted to make a List but Gerke said it was ok to find the first that matches.
+                        .orElse(null); // If no customer it ll return Null.
         
         System.out.printf("Customer that has the highest bill of %.2f euro: \n", findHighestBill());
-        customerWithHighestBill.forEach(System.out::println); // Prints each customer with the highest bill
+        System.out.println(customerWithHighestBill != null ? customerWithHighestBill : "No customer! Check if anything went wrong!"); // Ternary statement instead of If/Else: If customer = notNull > Print the customer. If null > print no customer message.
 
-        System.out.println(findMostPayingCustomer());
+
+        System.out.println(findMostPayingCustomer()); // TODO: I Think this can be removed??
         System.out.println();
     }
 
