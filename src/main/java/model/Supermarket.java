@@ -111,8 +111,7 @@ public class Supermarket {
 
             int postcodeCounter = 0;
             int maxPerLine = 8;
-
-            for (String zipCode : entry.getValue()) {
+            for (String zipCode : entry.getValue()) { // For loop to only print 8 postcodes per line as is shown in assignment.
                     System.out.print(zipCode + ", ");
                     postcodeCounter++;
 
@@ -191,8 +190,6 @@ public class Supermarket {
      * @return Map with set of zipcodes per product
      */
     public Map<Product, Set<String>> findZipcodesPerProduct() {
-        // TODO stap 3: create an appropriate data structure for the products and their zipcodes
-        //  and find all the zipcodes per product
         Map<Product, Set<String>> zipCodesPerProduct = new HashMap<>();
         for (Customer customer : customers) {
             String zipCode = customer.getZipCode();
@@ -244,8 +241,6 @@ public class Supermarket {
      *
      * @return customer with highest bill
      */
-
-    // TODO: Check with Gerke if this needs to become a list. 2 users with the same highest bill could become an issue I think.
 
     public Customer findMostPayingCustomer() {
         double biggestBill = findHighestBill(); // Using method findHighestBill to get the biggest bill.
