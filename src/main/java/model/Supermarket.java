@@ -286,8 +286,6 @@ public class Supermarket {
      * @return Map with most bought product per zip code
      */
     public Map<String, Product> findMostBoughtProductByZipcode() {
-        // TODO Stap 5: create an appropriate data structure for the mostBought
-        //  and calculate its contents
         Map<String, Product> mostBoughtByZipcode = new TreeMap<>(); // TreemMap to store postcodes as key.
         Map<String, Map<Product, Integer>> productsByZipcode = findNumberOfProductsByZipcode(); // Creating a HashMap with method findNumberOfProductsByZipCode. Keys will be postcodes(string), the value of the map is another map with Product& Integer.
 
