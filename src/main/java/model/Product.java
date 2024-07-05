@@ -1,11 +1,12 @@
+/**
+ * Supermarket Customer check-out and Cashier simulation
+ * @author:  Mack Bakkum - 500721202
+ * @dates: 03 - 05 July 2024
+ */
+
 package model;
 
 import java.util.Objects;
-
-/**
- * Supermarket Customer check-out
- * @author  hbo-ict@hva.nl
- */
 
 public class Product implements Comparable<Product> {
     private String code;            // a unique product code; identical codes designate identical products

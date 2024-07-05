@@ -1,7 +1,10 @@
-package model; /**
+/**
  * Supermarket Customer check-out and Cashier simulation
- * @author  hbo-ict@hva.nl
+ * @author:  Mack Bakkum - 500721202
+ * @dates: 03 - 05 July 2024
  */
+
+package model;
 
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -38,9 +41,6 @@ public class Customer implements Comparable<Customer> {
 
 
     public void addToCart(Product product, int number) {
-        // TODO stap 2: When adding a number of products to the cart,
-        //  the number should be adjusted when product already exists in cart
-
         if (itemsCart.containsKey(product)) {
             int currentAmount = itemsCart.get(product);
             itemsCart.put(product, currentAmount + number); // If the product already exists in the cart then adds the new amoun with currentAmount.

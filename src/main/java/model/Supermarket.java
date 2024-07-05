@@ -1,3 +1,9 @@
+/**
+ * Supermarket Customer check-out and Cashier simulation
+ * @author:  Mack Bakkum - 500721202
+ * @dates: 03 - 05 July 2024
+ */
+
 package model;
 
 import java.time.LocalTime;
@@ -6,10 +12,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * Supermarket Customer and purchase statistics
- * @author  hbo-ict@hva.nl
- */
 public class Supermarket {
 
     private String name;                 // name of the case for reporting purposes
@@ -18,6 +20,10 @@ public class Supermarket {
     private LocalTime openTime;         // start time of the simulation
     private LocalTime closingTime;      // end time of the simulation
     private static final int INTERVAL_IN_MINUTES = 15; // to use for number of customers and revenues per 15 minute intervals
+
+    // Extra's for clean formatting
+    final String BOLD = "\033[1m";
+    final String RESET = "\033[0m";
 
     public Supermarket() {
         initializeCollections();
@@ -60,8 +66,10 @@ public class Supermarket {
             printErrorMessage();
             return;
         }
-        System.out.printf("\n>>>>> Customer Statistics of '%s' between %s and %s <<<<<\n",
-                this.name, this.openTime, this.closingTime);
+        System.out.printf("%s\n>>>>> Customer Statistics of '%s' between %s and %s <<<<< %s\n",
+                BOLD, this.name, this.openTime, this.closingTime, RESET);
+        System.out.printf("\n%d customers have shopped %d items out of %d different products\n",
+                this.customers.size(), this.getTotalNumberOfItems(), this.products.size());
         System.out.println();
 
         Customer customerWithHighestBill = customers.stream() // Creating stream of customers
@@ -73,8 +81,8 @@ public class Supermarket {
         System.out.println(customerWithHighestBill != null ? customerWithHighestBill : "No customer! Check if anything went wrong!"); // Ternary statement instead of If/Else: If customer = notNull > Print the customer. If null > print no customer message.
 
 
-        System.out.println(findMostPayingCustomer()); // TODO: I Think this can be removed??
-        System.out.println();
+        //System.out.println(findMostPayingCustomer()); // TODO: I Think this can be removed??
+        //System.out.println();
     }
 
     /**
@@ -85,36 +93,40 @@ public class Supermarket {
             printErrorMessage();
             return;
         }
-        System.out.println("\n>>>>> Product Statistics of all purchases <<<<<");
-        System.out.printf("%d customers have shopped %d items out of %d different products\n",
-                this.customers.size(), this.getTotalNumberOfItems(), this.products.size());
+        System.out.printf("%s\n>>>>> Product Statistics of all purchases <<<<<%s\n", BOLD, RESET);
         System.out.println();
         System.out.println(">>> Products and total number bought:");
-        System.out.println();
 
-        // TODO stap 3: display the description of the products and total number bought per product.
         Map <Product, Integer> productCounts = findNumberOfProductsBought();
         for (Map.Entry<Product, Integer> entry : productCounts.entrySet()) {
-            System.out.println(entry.getKey().getDescription() + " " + entry.getValue());
+            System.out.printf("%-35s %10d\n",entry.getKey().getDescription(), entry.getValue());
         }
 
         System.out.println();
-        System.out.println(">>> Products and zipcodes");
-        System.out.println();
+        System.out.printf("%s>>> Products and zipcodes%s\n", BOLD, RESET);
 
-        // TODO stap 3: display the description of the products and per product all zipcodes where the product is bought.
         Map<Product, Set<String>> zipCodesPerProduct = findZipcodesPerProduct();
         for (Map.Entry<Product, Set<String>> entry : zipCodesPerProduct.entrySet()) {
             System.out.println(entry.getKey().getDescription() + ":");
+
+            int postcodeCounter = 0;
+            int maxPerLine = 8;
+
             for (String zipCode : entry.getValue()) {
-                System.out.println(" " + zipCode + ", ");
+                    System.out.print(zipCode + ", ");
+                    postcodeCounter++;
+
+                    if (postcodeCounter > maxPerLine) {
+                        System.out.println();
+                        postcodeCounter = 0;
+                    }
             }
-            System.out.println(); // Empty println to move to next ln after printing the zip codes for the product.
+            System.out.println("\n"); // Empty println to move to next ln after printing the zip codes for the product.
         }
 
 
         System.out.println();
-        System.out.println(">>> Most popular products");
+        System.out.printf("%s>>> Most popular products %s\n", BOLD, RESET);
         System.out.println();
 
         System.out.println("Product(s) bought by most customers: ");
@@ -122,7 +134,7 @@ public class Supermarket {
         mostPopularProduct.forEach(product -> System.out.println(product.getDescription()));
         System.out.println();
 
-        System.out.println(">>> Most bought products per zipcode");
+        System.out.printf("%s>>> Most bought products per zipcode %s\n", BOLD, RESET);
         System.out.println();
         Map<String, Product> mostPopularByPostCode = findMostBoughtProductByZipcode();
         mostPopularByPostCode.forEach((postCode, product) -> System.out.println(postCode + " - " + product.getDescription()));
@@ -136,33 +148,32 @@ public class Supermarket {
      * report statistics of the input data of customer
      */
     public void printRevenueStatistics() {
-        System.out.println("\n>>>>> Revenue Statistics of all purchases <<<<<");
-        // TODO stap 5: calculate and show the total revenue and the average revenue
+        System.out.printf("%s\n>>>>> Revenue Statistics of all purchases <<<<< %s\n", BOLD, RESET);
+
         System.out.printf("\nTotal revenue = %.2f\nAverage revenue per customer = %.2f\n", findTotalRevenue(), findAverageRevenue());
         System.out.println();
-        System.out.print(">>> Revenues per zip-code:\n");
+        System.out.printf("%s>>> Revenues per zip-code:%s\n", BOLD, RESET);
         System.out.println();
 
         Map<String, Double> revenues = this.getRevenueByZipcode(); // Code was already supplied: Creates TreeMap (to sort automatically) called revenues.
         revenues.entrySet().stream() // Creating a stream from TreeMap revenues.
                         .sorted(Map.Entry.comparingByKey()) // Sorts the map, but I'm not sure if I need it since a TreeMap should sort automatically? TODO: TEST WITH REMOVING THIS!!!
-                        .forEach(entry -> System.out.printf("%-7s  -  %.2f\n", entry.getKey(), entry.getValue())); // ForEach loop that prints all the keys (postalcode) and then the values (revenue). Using print format or values are not rounded to 2 after decimal.
+                        .forEach(entry -> System.out.printf("%-7s -  %.2f\n", entry.getKey(), entry.getValue())); // ForEach loop that prints all the keys (postalcode) and then the values (revenue). Using print format or values are not rounded to 2 after decimal.
 
         System.out.println();
-        System.out.printf(">>> Revenues per interval of %d minutes\n", INTERVAL_IN_MINUTES);
+
+        System.out.printf("%s>>> Revenues per interval of %d minutes %s\n",BOLD, INTERVAL_IN_MINUTES, RESET);
         System.out.println();
 
         Map<LocalTime, Double> revenuePerInterval = calculateRevenuePerInterval(INTERVAL_IN_MINUTES); // Creating TreeMap in method calculateRevenuePerInterval. Using a TreeMap since I can easily sort by time.
-        revenuePerInterval.forEach((time, revenue) -> System.out.printf("%-20s - %.2f\n", time.format(DateTimeFormatter.ofPattern("HH:mm")), revenue));
+        revenuePerInterval.forEach((time, revenue) ->
+                System.out.printf("Between %-5s and %-5s the revenue was: %.2f\n", time.format(DateTimeFormatter.ofPattern("HH:mm")), time.plusMinutes(INTERVAL_IN_MINUTES).format(DateTimeFormatter.ofPattern("HH:mm")), revenue));
     }
 
     /**
      * @return Map with total number of purchases per product
      */
     public Map<Product, Integer> findNumberOfProductsBought() {
-
-        // TODO stap 3: create an appropriate data structure for the products and their numbers bought
-        //  and calculate the contents
 
         Map<Product, Integer> productCounter = new HashMap<>();
         for (Customer customer : customers) {

@@ -1,3 +1,9 @@
+/**
+ * Supermarket Customer check-out and Cashier simulation
+ * @author:  Mack Bakkum - 500721202
+ * @dates: 03 - 05 July 2024
+ */
+
 package utilities;
 
 import com.google.gson.*;

@@ -1,5 +1,10 @@
-package main;
+/**
+ * Supermarket Customer check-out and Cashier simulation
+ * @author:  Mack Bakkum - 500721202
+ * @dates: 03 - 05 July 2024
+ */
 
+package main;
 
 import model.Supermarket;
 import utilities.SupermarketBuilder;
