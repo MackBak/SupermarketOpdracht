@@ -116,13 +116,18 @@ public class Supermarket {
         System.out.println();
         System.out.println(">>> Most popular products");
         System.out.println();
-        // TODO stap 5: display the product(s) that most customers bought
-        System.out.println("Product(s) bought by most customers: ");
 
+        System.out.println("Product(s) bought by most customers: ");
+        Set<Product> mostPopularProduct = findMostPopularProducts();
+        mostPopularProduct.forEach(product -> System.out.println(product.getDescription()));
         System.out.println();
+
         System.out.println(">>> Most bought products per zipcode");
         System.out.println();
-        // TODO stap 5: display most bought products per zipcode
+        Map<String, Product> mostPopularByPostCode = findMostBoughtProductByZipcode();
+        mostPopularByPostCode.forEach((postCode, product) -> System.out.println(postCode + " - " + product.getDescription()));
+
+
 
         System.out.println();
     }
@@ -137,16 +142,16 @@ public class Supermarket {
         System.out.println();
         System.out.print(">>> Revenues per zip-code:\n");
         System.out.println();
-        // TODO stap 5 calculate and show total revenues per zipcode, use forEach and lambda expression
+
         Map<String, Double> revenues = this.getRevenueByZipcode(); // Code was already supplied: Creates TreeMap (to sort automatically) called revenues.
         revenues.entrySet().stream() // Creating a stream from TreeMap revenues.
                         .sorted(Map.Entry.comparingByKey()) // Sorts the map, but I'm not sure if I need it since a TreeMap should sort automatically? TODO: TEST WITH REMOVING THIS!!!
-                        .forEach(entry -> System.out.print(entry.getKey() + " " + entry.getValue())); // ForEach loop that prints all the keys (postalcode) and then the values (revenue)
+                        .forEach(entry -> System.out.printf("%-7s  -  %.2f\n", entry.getKey(), entry.getValue())); // ForEach loop that prints all the keys (postalcode) and then the values (revenue). Using print format or values are not rounded to 2 after decimal.
 
         System.out.println();
         System.out.printf(">>> Revenues per interval of %d minutes\n", INTERVAL_IN_MINUTES);
         System.out.println();
-        // TODO stap 5: show the revenues per time interval of 15 minutes, use forEach and lambda expression
+
         Map<LocalTime, Double> revenuePerInterval = calculateRevenuePerInterval(INTERVAL_IN_MINUTES); // Creating TreeMap in method calculateRevenuePerInterval. Using a TreeMap since I can easily sort by time.
         revenuePerInterval.forEach((time, revenue) -> System.out.printf("%-20s - %.2f\n", time.format(DateTimeFormatter.ofPattern("HH:mm")), revenue));
     }
@@ -320,7 +325,7 @@ public class Supermarket {
      * @return Map with revenues per interval
      */
     public Map<LocalTime, Double> calculateRevenuePerInterval(int minutes) {
-        Map<LocalTime, Double> revenuePerInterval = new HashMap<>(); // HashMap initialized which will get a time(LocalDate) as key and a revenue(double) as value.
+        Map<LocalTime, Double> revenuePerInterval = new TreeMap<>(); // Map initialized which will get a time(LocalDate) as key and a revenue(double) as value. Switched to TreeMap to fix sorting in output.
         LocalTime currentTime = openTime; // Opening time of the supermarket becomes currentTime.
 
         while (currentTime.isBefore(closingTime)) { // While loop that goes over all periods before the closing time.
