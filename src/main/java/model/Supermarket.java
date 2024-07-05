@@ -136,10 +136,10 @@ public class Supermarket {
         System.out.print(">>> Revenues per zip-code:\n");
         System.out.println();
         // TODO stap 5 calculate and show total revenues per zipcode, use forEach and lambda expression
-        Map<String, Double> revenues = this.getRevenueByZipcode();
-        revenues.entrySet().stream()
-                        .sorted(Map.Entry.comparingByKey())
-                                .forEach(entry -> System.out.print(entry.getKey() + " " + entry.getValue()))
+        Map<String, Double> revenues = this.getRevenueByZipcode(); // Code was already supplied: Creates TreeMap (to sort automatically) called revenues.
+        revenues.entrySet().stream() // Creating a stream from TreeMap revenues.
+                        .sorted(Map.Entry.comparingByKey()) // Sorts the map, but I'm not sure if I need it since a TreeMap should sort automatically? TODO: TEST WITH REMOVING THIS!!!
+                        .forEach(entry -> System.out.print(entry.getKey() + " " + entry.getValue())); // ForEach loop that prints all the keys (postalcode) and then the values (revenue)
 
         System.out.println();
         System.out.printf(">>> Revenues per interval of %d minutes\n", INTERVAL_IN_MINUTES);
