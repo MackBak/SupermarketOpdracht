@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -145,7 +146,8 @@ public class Supermarket {
         System.out.printf(">>> Revenues per interval of %d minutes\n", INTERVAL_IN_MINUTES);
         System.out.println();
         // TODO stap 5: show the revenues per time interval of 15 minutes, use forEach and lambda expression
-
+        Map<LocalTime, Double> revenuePerInterval = calculateRevenuePerInterval(INTERVAL_IN_MINUTES); // Creating TreeMap in method calculateRevenuePerInterval. Using a TreeMap since I can easily sort by time.
+        revenuePerInterval.forEach((time, revenue) -> System.out.printf("%-20s - %.2f\n", time.format(DateTimeFormatter.ofPattern("HH:mm")), revenue));
     }
 
     /**
@@ -286,8 +288,24 @@ public class Supermarket {
     public Map<String, Product> findMostBoughtProductByZipcode() {
         // TODO Stap 5: create an appropriate data structure for the mostBought
         //  and calculate its contents
+        Map<String, Product> mostBoughtByZipcode = new TreeMap<>(); // TreemMap to store postcodes as key.
+        Map<String, Map<Product, Integer>> productsByZipcode = findNumberOfProductsByZipcode(); // Creating a HashMap with method findNumberOfProductsByZipCode. Keys will be postcodes(string), the value of the map is another map with Product& Integer.
 
-        return null;
+        for (Map.Entry<String, Map<Product, Integer>> entry : productsByZipcode.entrySet()) { // For loop that goes over all the key value pairs in productsByZipCode.
+            String postCode = entry.getKey(); // Gets the current postcode
+            Map<Product, Integer> productCounter = entry.getValue(); // Gets the map of the product for the zipcode (the 2nd Map I created on line 292)
+
+            int maxQuantity = productCounter.values().stream().max(Integer::compareTo).orElse(0); // Creating a stream of values from the productCounter map. max = find maximum quantitiy in the stream in Integer, orElse returns 0 if no one purchased anything.
+
+            Product mostPurchased = productCounter.entrySet().stream() // Creating a stream of productCounter items.
+                    .filter(product -> product.getValue() == maxQuantity) // Filter to only keep items where the quantity is equal to maxQuantity.
+                    .map(Map.Entry::getKey) // Extracts a product from the filtered entry.
+                    .findFirst() // Gets the first product that matches the filter.
+                    .orElse(null); // Again returns null if nothing is purchased in a postcode.
+
+            mostBoughtByZipcode.put(postCode, mostPurchased); // Storing the postCode(string) and mostPurchased (Product object)
+        }
+        return mostBoughtByZipcode;
     }
 
     /**
