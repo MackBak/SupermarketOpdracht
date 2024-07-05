@@ -138,7 +138,6 @@ class SupermarketTest {
         assertThat(supermarket5.getRevenueByZipcode().get("1016DK"), is(closeTo(0.0,0.0001)));
     }
 
-
     @Test
     void t055_mostBoughtProductByZipCodeIsCorrect() {
         assertThat(supermarket1.findMostBoughtProductByZipcode().get("1015MF").toString(), Matchers.is("Verse scharreleieren 4 stuks"));

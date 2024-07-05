@@ -41,7 +41,7 @@ public class Product implements Comparable<Product> {
 
     @Override
     public String toString() {
-        return "ToString in product: " + description + " " + price + " " + code;
+        return description;
     }
 
     public String getCode() {
