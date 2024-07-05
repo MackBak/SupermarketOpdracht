@@ -3,9 +3,13 @@ package tests;
 import model.Product;
 import model.Supermarket;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import utilities.SupermarketBuilder;
 
+import java.time.LocalTime;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -95,14 +99,17 @@ class SupermarketTest {
 
     @Test
     void t042_highestBillIsCorrect() {
-        // TODO stap 6: write the testcode
-        Assertions.fail("Test not yet implemented ");
+        // Some code fails if I don't add a delta of 0.001. supermarket1 returns 33.849999999999994 instead of 33.85.
+        assertEquals(33.85, supermarket1.findHighestBill(), 0.001, "Highest bill 33.85");
+        assertEquals(4.75, supermarket2.findHighestBill(), "Highest bill 4.75");
+        assertEquals(46.71, supermarket5.findHighestBill(), "Highest bill 46.71");
     }
 
     @Test
     void t043_mostPayingCustomerIsCorrect() {
-        // TODO stap 6: write the testcode
-        Assertions.fail("Test not yet implemented ");
+        assertEquals((LocalTime.parse("12:03:44")), supermarket1.findMostPayingCustomer().getQueuedAt(), "Customer should've queued at 12:03:44");
+        assertEquals((LocalTime.parse("12:03:58")), supermarket2.findMostPayingCustomer().getQueuedAt(), "Customer should've queued at 12:03:58");
+        assertEquals((LocalTime.parse("12:01:51")), supermarket5.findMostPayingCustomer().getQueuedAt(), "Customer should've queued at 12:01:51");
     }
 
     @Test
