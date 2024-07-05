@@ -320,10 +320,22 @@ public class Supermarket {
      * @return Map with revenues per interval
      */
     public Map<LocalTime, Double> calculateRevenuePerInterval(int minutes) {
-        // TODO Stap 5: create an appropiate data structure for the revenue per time interval
-        //  Start time of an interval is a key. Find the total revenue for each interval
+        Map<LocalTime, Double> revenuePerInterval = new HashMap<>(); // HashMap initialized which will get a time(LocalDate) as key and a revenue(double) as value.
+        LocalTime currentTime = openTime; // Opening time of the supermarket becomes currentTime.
 
-        return null;
+        while (currentTime.isBefore(closingTime)) { // While loop that goes over all periods before the closing time.
+            LocalTime intervalEnd = currentTime.plusMinutes(minutes); // Calculates end time of current interval by adding the parsed minutes to the currentTime.
+
+            LocalTime finalCurrentTime = currentTime; // Need this in the upcoming Lambda expression to set interval start time.
+            double intervalRevenue = customers.stream() // Creating a stream of customers.
+                    .filter(customer -> !customer.getQueuedAt().isBefore(finalCurrentTime) && customer.getQueuedAt().isBefore(intervalEnd)) // Checking that arrival time is not before the start time set in finalCurrentTime and arrives before end of intervalEnd.
+                    .mapToDouble(Customer::calculateTotalBill) // For each customer the method calculates their total bill.
+                    .sum();
+
+            revenuePerInterval.put(currentTime, intervalRevenue); // Adds the time and revenue from the interval to the map.
+            currentTime = intervalEnd; // Goes to the next interval and keeps going as long as it's before closingTime.
+        }
+        return revenuePerInterval;
     }
 
     public Set<Product> getProducts() {
