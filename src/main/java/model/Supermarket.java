@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Supermarket Customer and purchase statistics
@@ -136,6 +137,9 @@ public class Supermarket {
         System.out.println();
         // TODO stap 5 calculate and show total revenues per zipcode, use forEach and lambda expression
         Map<String, Double> revenues = this.getRevenueByZipcode();
+        revenues.entrySet().stream()
+                        .sorted(Map.Entry.comparingByKey())
+                                .forEach(entry -> System.out.print(entry.getKey() + " " + entry.getValue()))
 
         System.out.println();
         System.out.printf(">>> Revenues per interval of %d minutes\n", INTERVAL_IN_MINUTES);
@@ -238,7 +242,9 @@ public class Supermarket {
      */
     public double findTotalRevenue() {
         // TODO Stap 5: use a stream to find the total of all bills
-        return 0.0;
+        return customers.stream()// Creating a stream of customers
+                .mapToDouble(Customer::calculateTotalBill) // Applying calculateTtotalBill to all Customers so it gets the total bill.
+                .sum(); // Finally returns the sum
     }
 
     /**
@@ -247,7 +253,7 @@ public class Supermarket {
      */
     public double findAverageRevenue() {
         // TODO Stap 5: use a stream to find the average of the bills
-        return 0.0;
+        return customers.isEmpty() ? 0.0 : findTotalRevenue() / customers.size(); // Returns 0 if no customers, using findTotalRevenue and dividing it by size of customer list to divide.
     }
 
     /**
@@ -255,10 +261,10 @@ public class Supermarket {
      * @return Map with revenues per zip code
      */
     public Map<String, Double> getRevenueByZipcode() {
-        // TODO Stap 5: create an appropriate data structure for the revenue
-        //  use stream and collector to find the content
-
-        return null;
+        return customers.stream() // Creating customer stream
+                .collect(Collectors.groupingBy(Customer::getZipCode, // Grouping the stream of customer by zipCode
+                        TreeMap::new, // Creating a new treeMap gather the results and have them sorted.
+                        Collectors.summingDouble(Customer::calculateTotalBill))); // For all postcodes the totalBill will be added to the sum.
     }
 
     /**
