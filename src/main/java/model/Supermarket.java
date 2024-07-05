@@ -244,7 +244,6 @@ public class Supermarket {
      * @return total revenue
      */
     public double findTotalRevenue() {
-        // TODO Stap 5: use a stream to find the total of all bills
         return customers.stream()// Creating a stream of customers
                 .mapToDouble(Customer::calculateTotalBill) // Applying calculateTtotalBill to all Customers so it gets the total bill.
                 .sum(); // Finally returns the sum
@@ -255,7 +254,6 @@ public class Supermarket {
      * @return average revenue
      */
     public double findAverageRevenue() {
-        // TODO Stap 5: use a stream to find the average of the bills
         return customers.isEmpty() ? 0.0 : findTotalRevenue() / customers.size(); // Returns 0 if no customers, using findTotalRevenue and dividing it by size of customer list to divide.
     }
 
