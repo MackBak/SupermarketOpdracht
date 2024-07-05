@@ -3,6 +3,7 @@ package model;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -274,9 +275,18 @@ public class Supermarket {
      * @return Set with products bought by most customers
      */
     public Set<Product> findMostPopularProducts() {
-        // TODO Stap 5: create an appropriate data structure for the most popular products and find its contents
+        Map<Product, Long> popularProduct = customers.stream() // Creates HashMap popularProcut. Will store the popularity in here. Keys = Product, Value = Long(Integer)
+                .flatMap(customer -> customer.getItemsCart().keySet().stream()) // keySet.stream extract the key (so Product), flatMap combines the individual products to a single stream from all customers.
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting())); // Collecting all elements in the stream into the map. With function.identity each product is grouped by itself. With counting it counts the amount of times it's in the stream.
 
-        return null;
+        long popularMax = popularProduct.values().stream() // Creating a stream for a Long(int) value
+                .max(Long::compareTo) // Finding the max popularity in all the products in the stream
+                .orElse(0L); // Returns 0 if no products again.
+
+        return popularProduct.entrySet().stream() // Creates a stream of the popularProduct map (key value pair = Product & Long)
+                .filter(entry -> entry.getValue() == popularMax) // Filtering all entries, will only keep the entries where popularity count equals popularMax.
+                .map(Map.Entry::getKey) // Maps the product object from the filter
+                .collect(Collectors.toSet()); // Collects the result of the most popular product in a set.
     }
 
     /**
